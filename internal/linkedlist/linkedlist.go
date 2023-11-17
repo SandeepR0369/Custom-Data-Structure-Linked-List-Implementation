@@ -1,6 +1,6 @@
 package Linkedlist
 
-func (l *Linkedlist) CAdd(val int) {
+func (l *Linkedlist) CircularAdd(val int) {
 	newNode := &Node{val: val}
 
 	if l.head == nil {
@@ -13,7 +13,7 @@ func (l *Linkedlist) CAdd(val int) {
 	l.tail = newNode // Update the tail to be the new node
 }
 
-func (l *Linkedlist) CDelete(val int) {
+func (l *Linkedlist) CircularDelete(val int) {
 	if l.head == nil {
 		// The list is empty
 		return
