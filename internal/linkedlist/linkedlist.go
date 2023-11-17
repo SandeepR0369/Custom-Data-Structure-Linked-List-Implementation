@@ -1,57 +1,104 @@
 package Linkedlist
 
-func (l *Linkedlist) CircularAdd(val int) {
-	newNode := &Node{val: val}
+import "fmt"
+
+type Node struct {
+	val  int
+	next *Node
+}
+
+type Linkedlist struct {
+	head   *Node
+	tail   *Node
+	length int
+}
+
+func (l *Linkedlist) Add(val int) {
+	newNode := new(Node)
+	newNode.val = val
 
 	if l.head == nil {
 		l.head = newNode
-		l.head.next = l.head // Pointing to itself
 	} else {
-		newNode.next = l.head // New node points to head
-		l.tail.next = newNode // Previous tail points to new node
+		i := l.head
+		for i.next != nil {
+			i = i.next
+		}
+		i.next = newNode
 	}
-	l.tail = newNode // Update the tail to be the new node
 }
 
-func (l *Linkedlist) CircularDelete(val int) {
-	if l.head == nil {
-		// The list is empty
-		return
-	}
+func (l *Linkedlist) AddFront(val int) {
+	newNode := new(Node)
+	newNode.val = val
+	newNode.next = l.head
+	l.head = newNode
+}
 
+func (l *Linkedlist) Update(val, x int) {
 	current := l.head
-	var prev *Node = nil
-
-	// If the list has only one node
-	if current.next == l.head && current.val == val {
-		l.head = nil
-		return
-	}
-
-	// Searching for the node to delete
-	for {
+	for current != nil {
 		if current.val == val {
-			if current == l.head {
-				// Node to delete is the head
-				l.head = current.next
-				l.tail.next = l.head
-			} else {
-				// Node is either a middle node or the tail
-				prev.next = current.next
-				if current == l.tail {
-					// Node is the tail
-					l.tail = prev
-				}
-			}
-			return
-		}
-
-		prev = current
-		current = current.next
-
-		// If we have traversed the entire list and are back at the head
-		if current == l.head {
+			current.val = x
 			break
 		}
+		current = current.next
 	}
+
+}
+
+/*
+func (l *Linkedlist) Delete(val int) {
+	current := l.head
+
+	if current == nil {
+		return
+	}
+
+	if current.val == val {
+		current = current.next
+		return
+	}
+
+	for current.next != nil && current.val != val {
+		current = current.next
+	}
+
+	if current.next != nil {
+		current.next = current.next.next
+	}
+}*/
+
+func (l *Linkedlist) Delete(val int) {
+	current := l.head
+
+	// If the list is empty, return immediately
+	if current == nil {
+		return
+	}
+
+	// If the head is the node to be deleted
+	if current.val == val {
+		l.head = current.next
+		return
+	}
+
+	// Find the node before the node to be deleted
+	for current.next != nil && current.next.val != val {
+		current = current.next
+	}
+
+	// If the next node is the node to delete
+	if current.next != nil {
+		current.next = current.next.next
+	}
+}
+
+func (l *Linkedlist) Print() {
+	current := l.head
+	for current != nil {
+		fmt.Print(current.val, " ")
+		current = current.next
+	}
+	fmt.Println()
 }
